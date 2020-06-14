@@ -74,6 +74,33 @@
           shadowSize: [41, 41]
             });
 
+      var violetIcon = new L.Icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+            });
+
+      var orangeIcon = new L.Icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+            });
+
+      var blackIcon = new L.Icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+            });
+
       var customPopupA = "This is Gleason Lake. I went here during my first Thanksgiving in the US.<br/><img src='https://www.opticolour.co.uk/wp-content/uploads/product_images/autumn-lake-lan113-printed-glass-splashbacks.jpg'width='100px'/>";       
       
       var daLake = L.marker([44.984389, -93.496528], {icon: greenIcon}).bindPopup(customPopupA);
@@ -86,16 +113,38 @@
       
       var daClub = L.marker([44.978276, -93.530556], {icon: redIcon}).bindPopup(customPopupC);
 
+      var wayzataBlvd = [[44.976216, -93.513692], [44.976057, -93.502116]];
+
+      var customPopupD = "These areas saw change from 1966 to present day.";
+
+      var change1 = L.marker([44.980173, -93.497674], {icon: violetIcon}).bindPopup(customPopupD);
+      var change2 = L.marker([44.975877, -93.495931], {icon: orangeIcon}).bindPopup(customPopupD);
+      var change3 = L.marker([44.976074, -93.505211], {icon: blackIcon}).bindPopup(customPopupD);
+
+      var line = L.polyline(wayzataBlvd, {color: 'blue'})
+      .bindPopup("This is part of the Wayzata Boulevard, constructed after this photo was taken in 1966");
+
+      var lakeChange = [[44.991508, -93.534604], [44.990199, -93.532941], [44.990161, -93.532388], [44.990605, -93.531760], [44.991007, -93.531771], [44.991800, -93.532243], [44.992273, -93.533832]];
+      var polygon = L.polygon(lakeChange, {color: 'gold'})
+      .bindPopup("This is lake Lydiard. Over the last 50 years, it has changed shape due to human intervention")
+
+      var interest = L.layerGroup([daClub, daShop, daLake]);
+
+      var daChange = L.layerGroup([change1, change2, change3, line, polygon]);
+
       var daTiles = {
         "Open Street Map": OSM,
-        // "Wayzata in 2012": wayzata2012
         "Wayzata in 1966": wayzata66
       }
 
       var daVectors = {
-        "The Stadium": daShop,
-        "The Planetarium": daLake,
-        "The Street": daClub
+        "Areas of Interest": interest,
+        "Change": daChange
+      //   "The Supermarket": daShop,
+      //   "The Lake": daLake,
+      //   "The Country Club": daClub,
+        // "The Change": daChange
+        // "The Road": wayzataBlvd
       }
 
       L.control.layers(daVectors, daTiles).addTo(map)
