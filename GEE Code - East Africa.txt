@@ -1,0 +1,130 @@
+//1 Imported vector layer used throughout - Africa Countries Polygon 'Africa'
+//Location of dataset - https://developers.google.com/earth-engine/datasets/catalog/NASA_FLDAS_NOAH01_C_GL_M_V001
+
+//Defining dataset and layer
+var dataset = ee.ImageCollection('NASA/FLDAS/NOAH01/C/GL/M/V001')
+              .filter(ee.Filter.date('2018-11-01', '2018-12-01'));
+var layer = dataset.select('Evap_tavg');
+
+//Reducing FeatureCollection
+var evapotrans = dataset.max()
+
+//Defining colour palette for evapotranspiration dataset
+var spectral = ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#ffffbf','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837']
+
+//Selecting 4 countries worst hit by 2011 East Africa Drought
+var country1 = Africa.filter(ee.Filter.eq('COUNTRY', 'Ethiopia'));
+var country2 = Africa.filter(ee.Filter.eq('COUNTRY', 'Somalia'));
+var country3 = Africa.filter(ee.Filter.eq('COUNTRY', 'Kenya'));
+var country4 = Africa.filter(ee.Filter.eq('COUNTRY', 'Djibouti'));
+
+//Clip dataset around 4 Countries worst hit by the 2011 drought
+var daClip1 = layer.median().clip(country1);
+var daClip2 = layer.median().clip(country2);
+var daClip3 = layer.median().clip(country3);
+var daClip4 = layer.median().clip(country4);
+
+
+//Mean Evapotranspiration Rates in East Africa by Country
+var mean1 = evapotrans.reduceRegion({
+  reducer: ee.Reducer.mean(),
+  geometry: country1,
+  scale: 100000
+})
+print(mean1);
+
+var mean2 = evapotrans.reduceRegion({
+  reducer: ee.Reducer.mean(),
+  geometry: country2,
+  scale: 100000
+})
+print(mean2);
+
+var mean3 = evapotrans.reduceRegion({
+  reducer: ee.Reducer.mean(),
+  geometry: country3,
+  scale: 100000
+})
+print(mean3);
+
+var mean4 = evapotrans.reduceRegion({
+  reducer: ee.Reducer.mean(),
+  geometry: country4,
+  scale: 100000
+})
+print(mean4);
+            
+//Adding layers and setting map center
+Map.setCenter(41.798, 7.395, 4.5);
+Map.addLayer(daClip1, {min:0, max: 0.00005, palette: spectral.reverse()}, 'Ethiopia');
+Map.addLayer(daClip2, {min:0, max: 0.00005, palette: spectral}, 'Somalia');
+Map.addLayer(daClip3, {min:0, max: 0.00005, palette: spectral}, 'Kenya');
+Map.addLayer(daClip4, {min:0, max: 0.00005, palette: spectral}, 'Djibouti');
+
+//Cities/Municipalities/Towns in Kenya w/ >200,000 people
+var Nakuru = ee.Geometry.Point([36.099, -0.292]);
+var Mombasa = ee.Geometry.Point([39.666, -4.054]);
+var Ruiru = ee.Geometry.Point([36.957, -1.1556]);
+var Eldoret = ee.Geometry.Point([35.2724, 0.5155]);
+var Kisumu = ee.Geometry.Point([34.7725, -0.0942]);
+var Malindi = ee.Geometry.Point([40.1149, -3.2129]);
+var Thika = ee.Geometry.Point([37.0821, -1.0313]);
+var Kikuyu = ee.Geometry.Point([36.6757, -1.2468]);
+var Kangundo_Tala = ee.Geometry.Point([37.3333, -1.2865]);
+
+Map.addLayer(Nakuru, {color: 'cyan'}, 'Nakuru');
+Map.addLayer(Mombasa, {color: 'cyan'}, 'Mombasa');
+Map.addLayer(Ruiru, {color: 'cyan'}, 'Ruiru');
+Map.addLayer(Eldoret, {color: 'cyan'}, 'Eldoret');
+Map.addLayer(Kisumu, {color: 'cyan'}, 'Kisumu');
+Map.addLayer(Malindi, {color: 'cyan'}, 'Malindi');
+Map.addLayer(Thika, {color: 'cyan'}, 'Thika');
+Map.addLayer(Kikuyu, {color: 'cyan'}, 'Kikuyu');
+Map.addLayer(Kangundo_Tala, {color: 'cyan'}, 'Kangundo-Tala');
+
+//Cities/Municipalities/Towns in Somalia w/ >200,000 people
+var Galkayo = ee.Geometry.Point([47.437, 6.828]);
+var Bosaso = ee.Geometry.Point([49.205, 11.275]);
+var Hargeisa = ee.Geometry.Point([44.064, 9.589]);
+var Burco = ee.Geometry.Point([45.558, 9.546]);
+var Borama = ee.Geometry.Point([43.198, 9.979]);
+
+Map.addLayer(Galkayo, {color: 'magenta'}, 'Galkayo');
+Map.addLayer(Bosaso, {color: 'magenta'}, 'Bosaso');
+Map.addLayer(Hargeisa, {color: 'magenta'}, 'Hargeisa');
+Map.addLayer(Burco, {color: 'magenta'}, 'Burco');
+Map.addLayer(Borama, {color: 'magenta'}, 'Borama');
+
+//Cities/Municipalities/Towns in Ethiopia w/ >200,000 people
+var Bahir_Dar = ee.Geometry.Point([37.39, 11.595]);
+var Gondar = ee.Geometry.Point([37.455, 12.605]);
+var Mekelle = ee.Geometry.Point([39.467, 13.51]);
+var Dessie = ee.Geometry.Point([39.617, 11.129]);
+var Adama = ee.Geometry.Point([39.2538, 8.5323]);
+var Awassa = ee.Geometry.Point([38.5042, 7.036]);
+var Dire_Dawa = ee.Geometry.Point([41.845, 9.6]);
+
+Map.addLayer(Bahir_Dar, {color: 'blue'}, 'Bahir Dar');
+Map.addLayer(Gondar, {color: 'blue'}, 'Gondar');
+Map.addLayer(Mekelle, {color: 'blue'}, 'Mekelle');
+Map.addLayer(Dessie, {color: 'blue'}, 'Dessie');
+Map.addLayer(Adama, {color: 'blue'}, 'Adama');
+Map.addLayer(Awassa, {color: 'blue'}, 'Awassa');
+Map.addLayer(Dire_Dawa, {color: 'blue'}, 'Dire Dawa');
+
+//Points for capital cities
+var Nairobi = ee.Geometry.Point([36.832, -1.279]);
+var Addis_Ababa = ee.Geometry.Point([38.739, 9]);
+var Djibouti_city = ee.Geometry.Point([43.134, 11.568]);
+var Mogadishu = ee.Geometry.Point([45.303, 2.083]);
+
+// Compute a buffer of the polygon.
+var buffer1 = Nairobi.buffer(45000);
+var buffer2 = Addis_Ababa.buffer(45000);
+var buffer3 = Djibouti_city.buffer(45000);
+var buffer4 = Mogadishu.buffer(45000);
+
+Map.addLayer(buffer1, {color: 'black'}, 'Nairobi');
+Map.addLayer(buffer2, {color: 'black'}, 'Addis Ababa');
+Map.addLayer(buffer3, {color: 'black'}, 'DjiBouti');
+Map.addLayer(buffer4, {color: 'black'}, 'Mogadishu');
