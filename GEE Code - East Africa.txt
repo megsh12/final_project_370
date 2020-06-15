@@ -25,7 +25,7 @@ var daClip3 = layer.median().clip(country3);
 var daClip4 = layer.median().clip(country4);
 
 
-//Mean Evapotranspiration Rates in East Africa by Country
+//Mean evapotranspiration rate in Ethiopia
 var mean1 = evapotrans.reduceRegion({
   reducer: ee.Reducer.mean(),
   geometry: country1,
@@ -33,6 +33,7 @@ var mean1 = evapotrans.reduceRegion({
 })
 print(mean1);
 
+//Mean evapotranspiration rate in Somalia
 var mean2 = evapotrans.reduceRegion({
   reducer: ee.Reducer.mean(),
   geometry: country2,
@@ -40,6 +41,7 @@ var mean2 = evapotrans.reduceRegion({
 })
 print(mean2);
 
+//Mean evapotranspiration rate in Kenya
 var mean3 = evapotrans.reduceRegion({
   reducer: ee.Reducer.mean(),
   geometry: country3,
@@ -47,6 +49,7 @@ var mean3 = evapotrans.reduceRegion({
 })
 print(mean3);
 
+//Mean evapotranspiration rate in Djibouti
 var mean4 = evapotrans.reduceRegion({
   reducer: ee.Reducer.mean(),
   geometry: country4,
@@ -54,14 +57,16 @@ var mean4 = evapotrans.reduceRegion({
 })
 print(mean4);
             
-//Adding layers and setting map center
+//Define map center and zoom
 Map.setCenter(41.798, 7.395, 4.5);
+
+//Add clipped layers to map
 Map.addLayer(daClip1, {min:0, max: 0.00005, palette: spectral.reverse()}, 'Ethiopia');
 Map.addLayer(daClip2, {min:0, max: 0.00005, palette: spectral}, 'Somalia');
 Map.addLayer(daClip3, {min:0, max: 0.00005, palette: spectral}, 'Kenya');
 Map.addLayer(daClip4, {min:0, max: 0.00005, palette: spectral}, 'Djibouti');
 
-//Cities/Municipalities/Towns in Kenya w/ >200,000 people
+//Cities/Municipalities/Towns in Kenya with >200,000 people
 var Nakuru = ee.Geometry.Point([36.099, -0.292]);
 var Mombasa = ee.Geometry.Point([39.666, -4.054]);
 var Ruiru = ee.Geometry.Point([36.957, -1.1556]);
@@ -72,6 +77,7 @@ var Thika = ee.Geometry.Point([37.0821, -1.0313]);
 var Kikuyu = ee.Geometry.Point([36.6757, -1.2468]);
 var Kangundo_Tala = ee.Geometry.Point([37.3333, -1.2865]);
 
+//Add Kenyan cities/municipalities/towns to map
 Map.addLayer(Nakuru, {color: 'cyan'}, 'Nakuru');
 Map.addLayer(Mombasa, {color: 'cyan'}, 'Mombasa');
 Map.addLayer(Ruiru, {color: 'cyan'}, 'Ruiru');
@@ -82,20 +88,21 @@ Map.addLayer(Thika, {color: 'cyan'}, 'Thika');
 Map.addLayer(Kikuyu, {color: 'cyan'}, 'Kikuyu');
 Map.addLayer(Kangundo_Tala, {color: 'cyan'}, 'Kangundo-Tala');
 
-//Cities/Municipalities/Towns in Somalia w/ >200,000 people
+//Cities/Municipalities/Towns in Somalia with >200,000 people
 var Galkayo = ee.Geometry.Point([47.437, 6.828]);
 var Bosaso = ee.Geometry.Point([49.205, 11.275]);
 var Hargeisa = ee.Geometry.Point([44.064, 9.589]);
 var Burco = ee.Geometry.Point([45.558, 9.546]);
 var Borama = ee.Geometry.Point([43.198, 9.979]);
 
+//Add Somalian cities/municipalities/towns to map
 Map.addLayer(Galkayo, {color: 'magenta'}, 'Galkayo');
 Map.addLayer(Bosaso, {color: 'magenta'}, 'Bosaso');
 Map.addLayer(Hargeisa, {color: 'magenta'}, 'Hargeisa');
 Map.addLayer(Burco, {color: 'magenta'}, 'Burco');
 Map.addLayer(Borama, {color: 'magenta'}, 'Borama');
 
-//Cities/Municipalities/Towns in Ethiopia w/ >200,000 people
+//Cities/Municipalities/Towns in Ethiopia with >200,000 people
 var Bahir_Dar = ee.Geometry.Point([37.39, 11.595]);
 var Gondar = ee.Geometry.Point([37.455, 12.605]);
 var Mekelle = ee.Geometry.Point([39.467, 13.51]);
@@ -104,6 +111,7 @@ var Adama = ee.Geometry.Point([39.2538, 8.5323]);
 var Awassa = ee.Geometry.Point([38.5042, 7.036]);
 var Dire_Dawa = ee.Geometry.Point([41.845, 9.6]);
 
+//Add Ethiopian cities/municipalities/towns to map
 Map.addLayer(Bahir_Dar, {color: 'blue'}, 'Bahir Dar');
 Map.addLayer(Gondar, {color: 'blue'}, 'Gondar');
 Map.addLayer(Mekelle, {color: 'blue'}, 'Mekelle');
@@ -112,18 +120,19 @@ Map.addLayer(Adama, {color: 'blue'}, 'Adama');
 Map.addLayer(Awassa, {color: 'blue'}, 'Awassa');
 Map.addLayer(Dire_Dawa, {color: 'blue'}, 'Dire Dawa');
 
-//Points for capital cities
+//Define points for capital cities in Kenya/Ethiopia/Djibouti/Somalia
 var Nairobi = ee.Geometry.Point([36.832, -1.279]);
 var Addis_Ababa = ee.Geometry.Point([38.739, 9]);
 var Djibouti_city = ee.Geometry.Point([43.134, 11.568]);
 var Mogadishu = ee.Geometry.Point([45.303, 2.083]);
 
-// Compute a buffer of the polygon.
+//Buffer around capital city points to differentiate these points from smaller cities
 var buffer1 = Nairobi.buffer(45000);
 var buffer2 = Addis_Ababa.buffer(45000);
 var buffer3 = Djibouti_city.buffer(45000);
 var buffer4 = Mogadishu.buffer(45000);
 
+//Add capital city points to map
 Map.addLayer(buffer1, {color: 'black'}, 'Nairobi');
 Map.addLayer(buffer2, {color: 'black'}, 'Addis Ababa');
 Map.addLayer(buffer3, {color: 'black'}, 'DjiBouti');
