@@ -35,10 +35,9 @@
       //   attribution: 'USGS'
       // }).addTo(map);
 
-      var OSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	        maxZoom: 19,
-	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+      var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	        attribution: 'ESRI'
+          });
 
       var wayzata66 = L.tileLayer('../wayzata_1966/{z}/{x}/{y}.png', {
         minZoom: 12,
@@ -133,7 +132,7 @@
       var daChange = L.layerGroup([change1, change2, change3, line, polygon]);
 
       var daTiles = {
-        "Open Street Map": OSM,
+        "ESRI World Imagery": esri,
         "Wayzata in 1966": wayzata66
       }
 
