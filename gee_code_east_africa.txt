@@ -1,6 +1,7 @@
 //1 Imported vector layer used throughout - Africa Countries Polygon 'Africa'
 //Location of dataset - https://developers.google.com/earth-engine/datasets/catalog/NASA_FLDAS_NOAH01_C_GL_M_V001
 
+//Raster Layer
 //Defining dataset and layer
 var dataset = ee.ImageCollection('NASA/FLDAS/NOAH01/C/GL/M/V001')
               .filter(ee.Filter.date('2018-11-01', '2018-12-01'));
@@ -66,6 +67,7 @@ Map.addLayer(daClip2, {min:0, max: 0.00005, palette: spectral}, 'Somalia');
 Map.addLayer(daClip3, {min:0, max: 0.00005, palette: spectral}, 'Kenya');
 Map.addLayer(daClip4, {min:0, max: 0.00005, palette: spectral}, 'Djibouti');
 
+//Vector Layer
 //Cities/Municipalities/Towns in Kenya with >200,000 people
 var Nakuru = ee.Geometry.Point([36.099, -0.292]);
 var Mombasa = ee.Geometry.Point([39.666, -4.054]);
@@ -137,3 +139,67 @@ Map.addLayer(buffer1, {color: 'black'}, 'Nairobi');
 Map.addLayer(buffer2, {color: 'black'}, 'Addis Ababa');
 Map.addLayer(buffer3, {color: 'black'}, 'DjiBouti');
 Map.addLayer(buffer4, {color: 'black'}, 'Mogadishu');
+
+//Creating a Legend
+// set position of panel
+var legend = ui.Panel({
+  style: {
+    position: 'bottom-left',
+    padding: '8px 15px'
+  }
+});
+
+// Create legend title
+var legendTitle = ui.Label({
+  value: 'My Legend',
+  style: {
+    fontWeight: 'bold',
+    fontSize: '18px',
+    margin: '0 0 4px 0',
+    padding: '0'
+    }
+});
+
+// Add the title to the panel
+legend.add(legendTitle);
+    
+// Creates and styles 1 row of the legend.
+var makeRow = function(color, name) {
+      
+      // Create the label that is actually the colored box.
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: '#' + color,
+          // Use padding to give the box height and width.
+          padding: '8px',
+          margin: '0 0 4px 0'
+        }
+      });
+      
+      // Create the label filled with the description text.
+      var description = ui.Label({
+        value: name,
+        style: {margin: '0 0 4px 6px'}
+      });
+      
+      // return the panel
+      return ui.Panel({
+        widgets: [colorBox, description],
+        layout: ui.Panel.Layout.Flow('horizontal')
+      });
+};
+
+
+//  Palette with the colors (same as spectral, defined above)
+var palette =['a50026','d73027','f46d43','fdae61','fee08b','ffffbf','d9ef8b','a6d96a','66bd63','1a9850','006837'];
+
+// name of the legend
+var names = ['Highest Evapotranspiration','','','','','','','','','', 'Lowest Evapotranspiration'];
+
+// Add color and add names (both defined above)
+for (var i = 0; i < 11; i++) {
+  legend.add(makeRow(palette[i], names[i]));
+  }  
+
+// add legend to map  
+Map.add(legend); 
